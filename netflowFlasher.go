@@ -43,9 +43,26 @@ func setupLogger() {
 	log.SetFlags(0)
 }
 
-// 字节转 MB
-func bytesToMB(b int64) int64 {
-	return b / 1024 / 1024
+// 字节转合适单位
+func formatBytes(b int64) string {
+	const (
+		KB = 1024
+		MB = 1024 * KB
+		GB = 1024 * MB
+		TB = 1024 * GB
+	)
+	switch {
+	case b >= TB:
+		return fmt.Sprintf("%.2f TB", float64(b)/float64(TB))
+	case b >= GB:
+		return fmt.Sprintf("%.2f GB", float64(b)/float64(GB))
+	case b >= MB:
+		return fmt.Sprintf("%.2f MB", float64(b)/float64(MB))
+	case b >= KB:
+		return fmt.Sprintf("%.2f KB", float64(b)/float64(KB))
+	default:
+		return fmt.Sprintf("%d B", b)
+	}
 }
 
 func main() {
@@ -94,7 +111,7 @@ func main() {
 
 					if err != nil {
 						if err == io.EOF {
-							log.Printf("%s 下载完成，本次 %d MB", prefix, bytesToMB(downloaded))
+							log.Printf("%s 下载完成，本次 %s", prefix, formatBytes(downloaded))
 						} else {
 							log.Printf("%s 下载失败: %v", prefix, err)
 						}
@@ -104,6 +121,6 @@ func main() {
 			}()
 		}
 
-		log.Printf("[R%d] 本轮结束，累计下载 %d MB", round, bytesToMB(atomic.LoadInt64(&totalDownloaded)))
+		log.Printf("[R%d] 本轮结束，累计下载 %s", round, formatBytes(atomic.LoadInt64(&totalDownloaded)))
 	}
 }
