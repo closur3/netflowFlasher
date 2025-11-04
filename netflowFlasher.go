@@ -18,6 +18,7 @@ type Config struct {
 	DatachunkMB  int64    `json:"datachunkMB"` // 单位 MB
 	Datachunk    int64    `json:"-"`           // 实际字节数
 	Timelapse    int      `json:"timelapse"`   // 单位秒
+	EnableLog    bool     `json:"enableLog"`   // 是否输出日志，默认 false
 }
 
 // 读取配置文件
@@ -38,9 +39,14 @@ func readConfig(path string) (*Config, error) {
 	return config, nil
 }
 
-// 设置日志格式（去掉默认时间戳）
-func setupLogger() {
-	log.SetFlags(0)
+// 设置日志格式
+func setupLogger(enable bool) {
+	if enable {
+		log.SetFlags(0)
+		// 输出日志
+	} else {
+		log.SetOutput(io.Discard)
+	}
 }
 
 // 字节转合适单位
@@ -66,12 +72,12 @@ func formatBytes(b int64) string {
 }
 
 func main() {
-	setupLogger()
-
 	config, err := readConfig("config.json")
 	if err != nil {
 		log.Fatalf("读取配置文件失败: %v", err)
 	}
+
+	setupLogger(config.EnableLog)
 
 	var totalDownloaded int64
 	round := 0

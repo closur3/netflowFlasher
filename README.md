@@ -1,5 +1,3 @@
-# NetFlow Flasher - 网络流量刷流工具
-
 一个轻量级的网络下行流量消耗工具，用于测试带宽、刷流量或网络压力测试。
 
 ## 特性
@@ -32,7 +30,8 @@ docker run --rm -v ./config.json:/app/config.json hsux/netflowflasher
     "https://mirror.example.com/large-file.tar.gz"
   ],
   "datachunkMB": 5,
-  "timelapse": 2
+  "timelapse": 2,
+  "enableLog": false
 }
 ```
 
@@ -43,6 +42,7 @@ docker run --rm -v ./config.json:/app/config.json hsux/netflowflasher
 | `downloadList` | 数组 | 下载URL列表，程序会循环访问 | 见上方示例 |
 | `datachunkMB` | 整数 | 每次下载的数据块大小（MB） | `5` = 每次5MB |
 | `timelapse` | 整数 | 下载间隔时间（秒） | `2` = 每2秒下载一次 |
+| `enableLog` | 布尔型 | 是否输出运行日志，默认 false | `true` 或 `false` |
 
 ### 速度计算
 
@@ -54,19 +54,22 @@ docker run --rm -v ./config.json:/app/config.json hsux/netflowflasher
 // 配置1：2.5 MB/s 限速
 {
   "datachunkMB": 5,
-  "timelapse": 2
+  "timelapse": 2,
+  "enableLog": false
 }
 
 // 配置2：10 MB/s 限速  
 {
   "datachunkMB": 10,
-  "timelapse": 1
+  "timelapse": 1,
+  "enableLog": false
 }
 
 // 配置3：1 MB/s 限速
 {
   "datachunkMB": 1,
-  "timelapse": 1
+  "timelapse": 1,
+  "enableLog": false
 }
 ```
 
