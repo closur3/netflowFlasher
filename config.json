@@ -5,7 +5,6 @@
     "https://ys-api.mihoyo.com/event/download_porter/link/ys_cn/official/pc_default",
     "https://ys-api.mihoyo.com/event/download_porter/link/ys_cn/official/android_default"
   ],
-  "datachunkMB": 2,
-  "timelapse": 1,
+  "maxSpeedMiBps": 2,
   "enableLog": false
 }
